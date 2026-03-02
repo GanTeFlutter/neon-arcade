@@ -1,103 +1,142 @@
-# Flutter Starter Template
+<h1 align="center">
+  arcadeX — NEON ARCADE
+</h1>
 
-A ready-to-use Flutter boilerplate that I use as the foundation for every new project. Instead of setting up architecture, theming, caching, and navigation from scratch each time, I clone this template and start building features immediately.
-
-## What's Included
-
-**Architecture** — Feature-based folder structure with BLoC/Cubit + Freezed for state management, GetIt for dependency injection, and GoRouter (type-safe, code-generated) for navigation.
-
-**Theming** — Material 3 theme system with 5 color variants, light/dark mode support, and a theme selection UI. Managed via Cubit + SharedPreferences.
-
-**Caching** — Dual-layer cache: SharedPreferences for simple key-value data, Hive CE for complex model storage. Both wrapped with clean abstractions.
-
-**Localization** — EasyLocalization with Turkish and English out of the box. Language switching built into the settings page.
-
-**Asset Generation** — FlutterGen for type-safe access to images, SVGs, Lottie animations, and fonts. No more hardcoded asset paths.
-
-**Shared Widgets & Utilities** — Reusable button components (primary, secondary, text) with haptic feedback, `AppPaddings` for consistent spacing, `AppMessenger` for SnackBar/Dialog/BottomSheet via context extensions, `RegexTypes` for common validation patterns, and responsive helpers.
-
-**Screens** — Splash, 5-step onboarding (with completion flag), home, and settings pages — all wired up and ready.
-
-**Documentation** — The `doc/new_feature/` directory is a built-in developer guide. It contains modular docs for every common task: creating a feature folder, adding models, services, state management, views, routes, assets, caching, and more. Each file is self-contained — read only the one you need. There's also a checklist to make sure nothing is missed when adding a new feature. See [`doc/new_feature/README.md`](doc/new_feature/README.md) for the full navigation table.
-
-## Screenshots
+<h3 align="center">5-in-1 Neon Mini Game Pack</h3>
 
 <p align="center">
-  <img src="app_image/onboarding.png" width="180" />
-  <img src="app_image/step5.png" width="180" />
-  <img src="app_image/home_0.png" width="180" />
-  <img src="app_image/home_1.png" width="180" />
-  <img src="app_image/settings.png" width="180" />
-  <img src="app_image/about.png" width="180" />
+  <b>Stack blocks. Solve puzzles. Match colors. Smash pong. Escape mazes.</b><br/>
+  Five addictive arcade games wrapped in a vibrant neon aesthetic.
 </p>
 
+---
+
+## Gameplay
+
+<p align="center">
+  <a href="https://www.instagram.com/p/DVXCn3YjOMY/">
+    <img src="https://img.shields.io/badge/Watch%20Gameplay-Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Watch on Instagram"/>
+  </a>
+</p>
+
+---
+
+## Games
+
+| # | Game | Color | Description |
+|---|------|-------|-------------|
+| 1 | **NEON STACK** | `#39FF14` | Stack falling blocks with pixel-perfect precision. Land them perfectly for combo bonuses. |
+| 2 | **GLOW GRID** | `#FFE700` | Toggle lights on a grid to solve each puzzle. 3 hints per level, star rating system. |
+| 3 | **COLOR PULSE** | `#FF00FF` | Match falling colored orbs to a rotating ring. Build combos, don't lose your lives. |
+| 4 | **NEON PONG** | `#FF6B35` | Classic pong reborn with 10 power-ups, 6 obstacle types, boss battles, and 3 game modes. |
+| 5 | **NEON MAZE** | `#00FFFF` | Navigate procedural mazes in the dark under time pressure. Drag or joystick controls. |
+
+### NEON PONG — Deep Dive
+
+Neon Pong is the flagship game with three distinct modes:
+
+- **Campaign** — 30 levels across 5 themed worlds (Neon City, Magenta Forge, Toxic Grid, Solar Flare, Red Void), each ending with a boss battle featuring unique attack patterns (spread shots, shields, lasers, clones, blackout).
+- **Endless** — Survive as long as you can against increasingly aggressive AI.
+- **Quick Match** — First to 11 points. Choose Easy, Medium, or Hard difficulty.
+
+---
 
 ## Tech Stack
 
-| Category | Package |
-|---|---|
-| State Management | flutter_bloc, freezed |
-| DI | get_it |
-| Routing | go_router, go_router_builder |
-| Cache | hive_ce, shared_preferences |
-| Localization | easy_localization |
-| Code Generation | build_runner, flutter_gen_runner, freezed, json_serializable |
-| UI | flutter_svg, lottie, shimmer, smooth_page_indicator |
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | Flutter 3.10+ / Dart 3.10+ |
+| **State Management** | flutter_bloc / Cubit + Freezed |
+| **Dependency Injection** | get_it |
+| **Navigation** | go_router (type-safe, code-generated) |
+| **Localization** | easy_localization (EN / TR) |
+| **Local Storage** | SharedPreferences + Hive CE |
+| **Audio** | audioplayers |
+| **Remote Config** | Firebase Remote Config |
+| **Linting** | very_good_analysis |
+
+---
+
+## Architecture
+
+```
+lib/
+├── feature/                 # Feature modules
+│   ├── games/
+│   │   ├── neon_stack/      # StatefulWidget + Ticker
+│   │   ├── glow_grid/       # Cubit + Freezed
+│   │   ├── color_pulse/     # StatefulWidget + Ticker
+│   │   ├── neon_pong/       # StatefulWidget + Ticker + Mixins
+│   │   └── neon_maze/       # StatefulWidget + Ticker
+│   ├── main_menu/
+│   └── settings/
+└── product/                 # Shared infrastructure
+    ├── cache/               # SharedCache & ProductCache
+    ├── const/               # NeonColors, fonts
+    ├── navigation/          # GoRouter config
+    ├── service/             # Audio, Score, Vibration services
+    ├── theme/               # Dark neon theme + NeonGameColors extension
+    └── widget/              # Reusable neon UI components
+```
+
+**Key patterns:**
+- Real-time games (Pong, Stack, Maze, Pulse) use `StatefulWidget` + `Ticker` for 60 FPS game loops with `CustomPainter` rendering.
+- Discrete/puzzle games (Glow Grid) use `Cubit` + `Freezed` for clean state transitions.
+- All rendering is done via `CustomPainter` — no game engine dependency.
+
+---
+
+## Theme & Design
+
+| Property | Value |
+|----------|-------|
+| Background | `#0A0A1A` |
+| Surface | `#0F0F2A` |
+| Mode | **Dark only** — forced neon aesthetic |
+| Display Font | **Orbitron** — futuristic headings |
+| Arcade Font | **Press Start 2P** — retro scores & labels |
+| Body Font | **Poppins** / **Inter** |
+
+All game colors are defined in `NeonColors` with glow helper utilities for consistent neon effects across the app.
+
+---
 
 ## Getting Started
 
 ```bash
+# Clone the repository
+git clone https://github.com/neonoyunlar/arcadex_akillisletme.git
+cd arcadex_akillisletme
+
 # Install dependencies
 flutter pub get
 
 # Run code generation
 dart run build_runner build --delete-conflicting-outputs
 
-# Run the app
+# Run
 flutter run
 ```
 
-## Project Structure
+### Requirements
 
-```
-├── doc/
-│   └── new_feature/          # Developer guides for adding features
-│       ├── README.md          # Quick navigation + checklist
-│       ├── folder_structure.md
-│       ├── model_rules.md
-│       ├── state_management.md
-│       ├── view_rules.md
-│       ├── service_rules.md
-│       ├── data_storage.md
-│       ├── route_and_strings.md
-│       ├── widget_and_theme.md
-│       ├── assets_and_flutter_gen.md
-│       └── ...
-├── lib/
-│   ├── feature/              # Feature modules
-│   │   ├── home/             # Home screen + background animation
-│   │   ├── login_process/    # Splash + Onboarding flow
-│   │   └── settings/         # Theme & language settings
-│   └── product/              # Shared infrastructure
-│       ├── cache/            # SharedCache + Hive (ProductCache)
-│       ├── const/            # AppPaddings, AppString, RegexTypes
-│       ├── generated/        # FlutterGen output (assets, fonts)
-│       ├── init/             # App init, localization, AppBuilder
-│       ├── navigation/       # GoRouter config + transitions
-│       ├── service/          # Service layer
-│       ├── state/            # App-wide cubits
-│       ├── theme/            # Material 3 themes + ThemeCubit
-│       ├── utils/            # AppMessenger, responsive, haptics
-│       └── widget/           # Shared button components
-└── assets/                   # Images, SVGs, Lottie, fonts, translations
-```
+- Flutter SDK `>=3.10.7`
+- Dart `>=3.10.7`
+- Android SDK / Xcode for target platform
 
-## Credits
+---
 
-Some architectural patterns and utilities were referenced from [hatayi-yasat](https://github.com/VB-CORE/hatayi_yasat), a production Flutter project.
+## Project Info
 
-## License
+| | |
+|--|--|
+| **Package** | `com.arcadex.akillisletme` |
+| **Version** | 1.0.1+2 |
+| **Languages** | English, Turkish |
+| **Developer** | [Neon Oyunlar](https://www.instagram.com/p/DVXCn3YjOMY/) |
 
-Feel free to use this template for your own projects.
+---
 
-# neon-arcade
+<p align="center">
+  Built with Flutter & neon dreams
+</p>
